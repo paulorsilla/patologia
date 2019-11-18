@@ -1,0 +1,34 @@
+<h1>Espécies cadastradas</h1>
+<div class="row">
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Espécie</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->especies as $especie): ?>
+                <tr>
+                    <td><?php echo $this->escapeHtml($especie->getDescricao()); ?></td>
+                    <td><a class="btn btn-primary btn-sm pull-center"
+                           href="<?php echo $this->url('patologia/especie', ['action' => 'save', 'id' => $especie->getId()]) ?>"
+                           title="Editar registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a class="btn btn-primary btn-sm pull-center"
+                           href="<?php echo $this->url('patologia/especie', ['action' => 'delete', 'id' => $especie->getId()]) ?>"
+                           title="Excluir registro."><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <span class="pull-right">
+        <?php echo $this->paginationControl($this->especies, 'Elastic', 'patologia/partial/paginator', ['route' => 'patologia/especie']); ?>
+    </span>
+</div>
+
+<div class="row">
+    <a class="btn btn-primary pull-left" href="/patologia/especie/save">Novo
+        registro</a>
+</div>

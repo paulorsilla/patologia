@@ -1,0 +1,138 @@
+<?php
+$this->headScript()->appendFile('/js/jquery.mask.js', 'text/javascript');
+
+$form = $this->form;
+
+$form->get('dataColheita')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite a data da colheita aqui'
+]);
+
+$form->get('localColheita')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o local da colheita aqui'
+]);
+
+$form->get('dataRecebimento')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite a data do recebimento aqui'
+]);
+
+$form->get('remetente')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o remetente aqui'
+]);
+
+$form->get('numeroAmostras')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o número de amostras aqui'
+]);
+
+$form->get('prefixoNumero')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o prefixo aqui'
+]);
+
+$form->get('sequenciaNumero')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o primeiro valor da sequência aqui'
+]);
+
+
+$form->get('sufixoNumero')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o sufixo aqui'
+]);
+
+
+$form->get('numeroRepeticoes')->setAttributes([
+    'class' => 'form-control',
+    'placeholder' => 'Digite o número de repetições aqui'
+]);
+
+$form->get('especie')->setAttributes([
+    'class' => 'form-control',
+]);
+
+$form->get('submit')->setAttributes([
+    'class' => 'btn btn-primary'
+]);
+?>
+
+<h1>Cadastro de amostras</h1>
+
+<div class="row">
+    <div class="col-md-22">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">
+                    Por favor, preencha o formulário abaixo e, em seguida, clique sobre
+                    o botão <i>Salvar</i>. <a
+                        class="btn btn-secondary btn-sm pull-right"
+                        href="/patologia/amostra" title="Fechar"><span
+                            class="glyphicon glyphicon-remove"></span></a>
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                <?php echo $this->form()->openTag($form); ?>
+                <?php echo $this->formLabel($form->get('especie')); ?><br>
+                <?php echo $this->formElement($form->get('especie')); ?>
+                <?php echo $this->formElementErrors($form->get('especie')); ?>                  
+
+                <?php echo $this->formLabel($form->get('dataColheita')); ?><br>
+                <?php echo $this->formElement($form->get('dataColheita')); ?>
+                <?php echo $this->formElementErrors($form->get('dataColheita')); ?>                  
+
+                <?php echo $this->formLabel($form->get('localColheita')); ?><br>
+                <?php echo $this->formElement($form->get('localColheita')); ?>
+                <?php echo $this->formElementErrors($form->get('localColheita')); ?>                  
+
+                <?php echo $this->formLabel($form->get('dataRecebimento')); ?><br>
+                <?php echo $this->formElement($form->get('dataRecebimento')); ?>
+                <?php echo $this->formElementErrors($form->get('dataRecebimento')); ?>                  
+
+                <?php echo $this->formLabel($form->get('remetente')); ?><br>
+                <?php echo $this->formElement($form->get('remetente')); ?>
+                <?php echo $this->formElementErrors($form->get('remetente')); ?>
+
+                <?php echo $this->formLabel($form->get('numeroAmostras')); ?><br>
+                <?php echo $this->formElement($form->get('numeroAmostras')); ?>
+                <?php echo $this->formElementErrors($form->get('numeroAmostras')); ?>
+
+                <?php echo $this->formLabel($form->get('numeroRepeticoes')); ?><br>
+                <?php echo $this->formElement($form->get('numeroRepeticoes')); ?>
+                <?php echo $this->formElementErrors($form->get('numeroRepeticoes')); ?>
+
+                <br><b>Preencha o formato do Número do Laboratório abaixo:</b>&nbsp;(Prefixo e sufixo podem ficar em branco, caso necessário).<br>
+                <div class="row">
+                    <div class="col-md-3">
+                        <?php echo $this->formLabel($form->get('prefixoNumero')); ?><br>
+                        <?php echo $this->formElement($form->get('prefixoNumero')); ?>
+                        <?php echo $this->formElementErrors($form->get('prefixoNumero')); ?>                  
+                    </div>
+                    <div class="col-md-6">
+                        <?php echo $this->formLabel($form->get('sequenciaNumero')); ?><br>
+                        <?php echo $this->formElement($form->get('sequenciaNumero')); ?>
+                        <?php echo $this->formElementErrors($form->get('sequenciaNumero')); ?>
+                    </div> 
+                    <div class="col-md-3">
+                        <?php echo $this->formLabel($form->get('sufixoNumero')); ?><br>
+                        <?php echo $this->formElement($form->get('sufixoNumero')); ?>
+                        <?php echo $this->formElementErrors($form->get('sufixoNumero')); ?>
+                    </div>
+                </div>               
+                <br><br>
+                <?php echo $this->formElement($form->get('submit')); ?>
+
+                <?php echo $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+//	$('#dataColheita').mask('00/00/0000');
+//	$('#dataRecebimento').mask('00/00/0000');
+    $('#numeroAmostras').mask('00000');
+    $('#numeroRepeticoes').mask('00');
+</script>

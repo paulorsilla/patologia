@@ -1,0 +1,80 @@
+<h1>Análise - visualizar resultados</h1>
+
+<div class="row">
+    <div class="col-sm-22">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">
+                    <a class="btn btn-secondary btn-sm pull-right"
+                       href="/patologia/resultado/find" title="Fechar"><span
+                            class="glyphicon glyphicon-remove"></span></a>
+                </h3>
+                <div class="col-sm-3">
+                    <b>Amostra:</b><br><?php echo $this->escapeHtml($this->amostra->getNumeroLaboratorio()); ?>
+                </div>
+                <div class="col-sm-3">
+                    <b>Espécie:</b><br><?php echo $this->escapeHtml($this->amostra->getEspecie()->getDescricao()); ?>
+                </div>
+                <div class="col-sm-3">
+                    <b>Data da colheita:</b><br><?php echo $this->escapeHtml((null != $this->amostra->getDataColheita()) ? $this->amostra->getDataColheita()->format("d/m/Y") : "-"); ?>
+                </div>
+                <div class="col-sm-5">
+                    <b>Local da colheita:</b><br><?php echo $this->escapeHtml($this->amostra->getLocalColheita()); ?>
+                </div>
+                <div class="col-sm-3">
+                    <b>Data do recebimento:</b><br><?php echo $this->escapeHtml((null != $this->amostra->getDataRecebimento()) ? $this->amostra->getDataRecebimento()->format("d/m/Y") : "-"); ?>
+                </div>
+                <div class="col-sm-4">
+                    <b>Remetente:</b><br><?php echo $this->escapeHtml($this->amostra->getRemetente()); ?>
+                </div>
+                <br>
+            </div>
+
+            <div class="panel-body">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="col-sm-1" style="text-align: center;" rowspan="2">Determinações</th>
+                            <th colspan="<?php echo $this->amostra->getNumeroRepeticoes(); ?>"
+                                style="text-align: center;">Repetições</th>
+                            <th class="col-sm-1" style="text-align: center; background-color: #f5f5f5;" rowspan="2">%</th>
+                        </tr>
+                        <tr>
+                            <?php foreach ($this->amostra->getRepeticoes() as $repeticao): ?>
+                                <th class="col-sm-1" style="text-align: center"><?php echo $repeticao->getSequencia(); ?>
+                                <?php endforeach; ?>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($amostra->getAnalise()->getVariaveis() as $variavel): ?>
+
+                            <tr>
+                                <td class="col-sm-2">
+                                    <?php if ($variavel->getDeterminacao()->getTipo() == 1) { ?>
+                                        <i><?php echo $variavel->getDeterminacao()->getDescricao(); ?></i>
+                                    <?php } else { ?>	
+                                        <?php echo $variavel->getDeterminacao()->getDescricao(); ?>
+                                    <?php } ?>
+                                </td>
+                                <?php foreach ($this->amostra->getRepeticoes() as $repeticao): ?>
+                                    <td class="col-sm-1" style="text-align: right;"><?php echo $this->escapeHtml($this->resultados[$repeticao->getId() . "-" . $variavel->getId()]); ?></td>
+                                <?php endforeach; ?>
+                                <td class="col-sm-1" style="background-color: #f5f5f5; text-align:right;"><b><?php echo $this->escapeHtml($this->totais[$variavel->getId()] / 2); ?></b></td>
+                            </tr>
+                        <?php endforeach; ?>		        	
+                    </tbody>
+                </table>
+                <div class="col-sm-20">
+                    <b>Saprófitas:</b>
+                </div>
+                <?php foreach ($amostra->getAnalise()->getSaprofitas() as $saprofita): ?>
+                    <div class="col-sm-5">
+                        <?php echo $this->escapeHtml($saprofita->getDescricao()); ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

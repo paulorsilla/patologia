@@ -1,0 +1,34 @@
+<h1>Saprófitas cadastradas</h1>
+<div class="row">
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Saprófita</th>
+                <th>Opções</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->saprofitas as $saprofita): ?>
+                <tr>
+                    <td><?php echo $this->escapeHtml($saprofita->getDescricao()); ?></td>
+                    <td><a class="btn btn-primary btn-sm pull-center"
+                           href="<?php echo $this->url('patologia/saprofita', ['action' => 'save', 'id' => $saprofita->getId()]) ?>"
+                           title="Editar registro."><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a class="btn btn-primary btn-sm pull-center"
+                           href="<?php echo $this->url('patologia/saprofita', ['action' => 'delete', 'id' => $saprofita->getId()]) ?>"
+                           title="Excluir registro."><span class="glyphicon glyphicon-trash"></span></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <span class="pull-right">
+        <?php echo $this->paginationControl($this->saprofitas, 'Elastic', 'patologia/partial/paginator', ['route' => 'patologia/saprofita']); ?>
+    </span>
+</div>
+
+<div class="row">
+    <a class="btn btn-primary pull-left" href="/patologia/saprofita/save">Novo
+        registro</a>
+</div>

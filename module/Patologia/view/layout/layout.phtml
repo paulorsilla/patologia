@@ -1,0 +1,80 @@
+<?php echo $this->doctype() ?>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?php echo $this->headTitle('Patologia de Sementes')->setSeparator(' - ')->setAutoEscape(false) ?>
+
+        <?php echo $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+
+        <!-- Le styles -->
+        <?php echo $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico'])
+            ->prependStylesheet($this->basePath('css/style.css'))
+            ->prependStylesheet($this->basePath('css/theme.css'))
+            ->prependStylesheet($this->basePath('css/select2.min.css'))
+            ->prependStylesheet($this->basePath('css/bootstrap.css'))
+        ?>
+        
+        <!-- Scripts -->
+        <?php echo  $this->headScript()
+            ->prependFile($this->basePath('js/bootstrap.min.js'))
+            ->prependFile($this->basePath('js/jquery-3.1.0.min.js'))
+        ?>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="<?= $this->url('home') ?>">
+                        <img src="<?php echo $this->basePath('img/embrapa4.png') ?>" height="28" alt="Embrapa Soja"/>&nbsp;Patologia de Sementes
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active"><a href="<?= $this->url('home') ?>">Início</a></li>
+
+                        <?php if ($this->identity() != null):?>
+                        
+                        <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">Cadastros<b class="caret"></b></a>
+                        	<ul class="dropdown-menu">
+                        		<li><a href="/patologia/amostra">Amostras</a>
+                        		<li><a href="/patologia/especie">Espécies</a></li>
+                        		<li><a href="/patologia/determinacao">Determinações</a></li>
+                        		<li><a href="/patologia/metodo">Métodos</a></li>
+                        		<li><a href="/patologia/saprofita">Saprófitas</a></li>
+                        	</ul>
+                        </li>
+                        <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">Análises<b class="caret"></b></a>
+                        	<ul class="dropdown-menu">
+                        		<li><a href="/patologia/analise/find">Entrada de dados</a></li>
+                        		<li><a href="/patologia/resultado/find">Visualizar resultados</a></li>
+                        	</ul>
+                        </li>
+                        <li class="dropdown"><a class="dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">Opções<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+    	            		<li><a href="/users">Gerenciar usuários</a></li>
+    	            		<li><a href="/logout">Sair</a></li>
+    	            	</ul>
+	                    <?php endif;?>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">
+            <?php echo $this->content ?>
+            <hr>
+            <footer>
+                <p>&copy; <?php echo date('Y') ?> - Empresa Brasileira de Pesquisa Agropecuária - Embrapa Soja.</p>
+            </footer>
+        </div>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

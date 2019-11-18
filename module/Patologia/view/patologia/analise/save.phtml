@@ -1,0 +1,211 @@
+<?php
+$this->headScript()->appendFile('/js/jquery.mask.js', 'text/javascript');
+
+$form = $this->form;
+
+$form->get('numeroLaboratorio')->setAttributes([
+    'class' => 'form-control'
+]);
+
+$form->get('submit')->setAttributes([
+    'class' => 'btn btn-secondary',
+    'value' => 'Salvar'
+]);
+?>
+
+<h4>Análise: entrada de dados</h4>
+
+<div class="row">
+    <div class="col-md-22">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix">
+                <h3 class="panel-title">
+                    <a class="btn btn-secondary btn-sm pull-right"
+                       href="/patologia/analise/find" title="Fechar"><span
+                            class="glyphicon glyphicon-remove"></span></a>
+                </h3>
+                <div class="col-sm-3 small">
+                    <b>Espécie:</b><br><?php echo $this->escapeHtml($this->amostra->getEspecie()->getDescricao()); ?></div>
+                <div class="col-sm-4 small">
+                    <b>Data da colheita:</b><br><?php echo $this->escapeHtml((null != $this->amostra->getDataColheita()) ? $this->amostra->getDataColheita()->format("d/m/Y") : "-"); ?></div>
+                <div class="col-sm-4 small">
+                    <b>Local da colheita:</b><br><?php echo $this->escapeHtml($this->amostra->getLocalColheita()); ?></div>
+                <div class="col-sm-5 small">
+                    <b>Data do recebimento:</b><br><?php echo $this->escapeHtml((null != $this->amostra->getDataRecebimento()) ? $this->amostra->getDataRecebimento()->format("d/m/Y") : "-"); ?></div>
+                <div class="col-sm-3 small">
+                    <b>Remetente:</b><br><?php echo $this->escapeHtml($this->amostra->getRemetente()); ?></div>
+            </div>
+
+            <div class="panel-body">
+                <?php echo $this->form()->openTag($form); ?>
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <b>Amostra:</b><br>
+                        <?php echo $this->formElement($form->get('numeroLaboratorio')); ?>
+                        <?php echo $this->formElementErrors($form->get('numeroLaboratorio')); ?>
+
+                        <input type='hidden' name='amostraId' id='amostraId' value='<?php echo $this->escapeHtml($this->amostra->getId()); ?>'> 
+                        <input type='hidden' name='irParaRepeticao' id='irParaRepeticao' value=""> 
+                        <input type='hidden' name='repeticaoAtual' id='repeticaoAtual' value="<?php echo $this->numeroRepeticao; ?>">
+                        <input type='hidden' name='encerrarAnalise' id='encerrarAnalise' value="">
+                    </div>
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-10">
+                        <b>Repetição:</b><br>
+                        <button class="btn btn-secondary btn-lg" id="repeticaoAnterior">Anterior</button>
+                        <input type="text" style="width: 40px;"
+                               value="<?php echo $this->numeroRepeticao; ?>" name="repeticao"
+                               id="repeticao">/<?php echo $this->amostra->getNumeroRepeticoes(); ?>
+                        <input type="hidden" name="numeroRepeticoes"
+                               id="numeroRepeticoes"
+                               value="<?php echo $this->amostra->getNumeroRepeticoes(); ?>">
+                        <button class="btn btn-secondary btn-lg" id="proximaRepeticao">Próxima</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-22" style="height: 500px; overflow-y: scroll;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="col-sm-12">Determinação</th>
+                                    <th class="col-sm-2">Resultado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($amostra->getAnalise()->getVariaveis() as $variavel): ?>
+
+                                    <tr class="clickable-row">
+                                        <td class="determinacao">
+                                            <?php if ($variavel->getDeterminacao()->getTipo() == 1) { ?>
+                                                <i><?php echo $variavel->getDeterminacao()->getDescricao(); ?></i>
+                                            <?php } else { ?>	
+                                                <?php echo $variavel->getDeterminacao()->getDescricao(); ?>
+                                            <?php } ?>
+                                        </td>
+                                        <td><input type="number"
+                                                   id="resultado_<?php echo $variavel->getId(); ?>"
+                                                   value="<?php echo $this->resultados[$variavel->getId()]; ?>"
+                                                   name="resultado_<?php echo $variavel->getId(); ?>"
+                                                   style="width: 100px;"></td>
+                                    </tr>
+                                <?php endforeach; ?>		        	
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr>
+                <div class="col-sm-22">
+                    <div class="col-sm-22">
+                        <b>Saprófitas</b>
+                    </div>
+                    <hr>
+                    <?php foreach ($saprofitas as $saprofita): ?>
+                        <div class="col-sm-7">
+                            <p>
+                                <?php if ($this->amostra->getAnalise()->getSaprofitas()->contains($saprofita)) { ?>
+                                    <input type="checkbox" id="saprofita_<?php echo $saprofita->getId(); ?>" name="saprofita_<?php echo $saprofita->getId(); ?>" checked>
+                                <?php } else { ?>	 
+                                    <input type="checkbox" id="saprofita_<?php echo $saprofita->getId(); ?>" name="saprofita_<?php echo $saprofita->getId(); ?>">
+                                <?php } ?>
+                                &nbsp;
+                                <label for="saprofita_<?php echo $saprofita->getId(); ?>"><i><?php echo $saprofita->getDescricao(); ?></i></label>
+                            </p>
+                        </div>
+
+                    <?php endforeach; ?>
+                </div>
+                &nbsp;
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <input type="button" id="encerrar" class="btn btn-secondary" value="Encerrar análise">
+                    </div>
+                    <div class="col-sm-17 offset-col-sm-3"></div>
+                    <div class="col-sm-2 text-right">
+                        <?php echo $this->formElement($form->get('submit')); ?>
+                    </div>
+                </div>
+
+                <?php echo $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $("#numeroLaboratorio").val($("#amostraId").val()).attr("disabled", true);
+
+        $("input[id^='resultado']").on("focus", function (e) {
+            $(this).closest("tr").addClass('active');
+            $(this).closest("td").addClass("lead");
+            $(this).closest('td').prev().addClass("lead");
+        });
+
+        $("input[id^='resultado']").on("focusout", function (e) {
+            $(this).closest("tr").removeClass('active');
+            $(this).closest("td").removeClass("lead");
+            $(this).closest('td').prev().removeClass("lead");
+        });
+
+        $("input[id^='resultado']").mask("0000", {placeholder: "0"});
+
+        $("#repeticao").mask("00");
+
+        $("#repeticao").on("change", function (e) {
+            e.preventDefault();
+            var valor = parseInt($(this).val());
+            var resultado = validaRepeticao(valor);
+            $("#irParaRepeticao").val(resultado);
+            $("#submitbutton").trigger("click");
+            $(this).val(resultado);
+        });
+
+        $("#repeticaoAnterior").on("click", function (e) {
+            e.preventDefault();
+            var novaRepeticao = parseInt($("#repeticao").val()) - 1;
+            var resultado = validaRepeticao(novaRepeticao);
+            $("#irParaRepeticao").val(resultado);
+            $("#submitbutton").trigger("click");
+            $("#repeticao").val(resultado);
+
+        });
+
+        $("#proximaRepeticao").on("click", function (e) {
+            e.preventDefault();
+            var novaRepeticao = parseInt($("#repeticao").val()) + 1;
+            var resultado = validaRepeticao(novaRepeticao);
+            $("#irParaRepeticao").val(resultado);
+            $("#submitbutton").trigger("click");
+            $("#repeticao").val(resultado);
+        });
+
+        $("#submitbutton").on("click", function (e) {
+            $("#numeroLaboratorio").attr("disabled", false);
+        });
+
+        $("#encerrar").on("click", function (e) {
+            e.preventDefault();
+            var amostra = $("#numeroLaboratorio>option:selected").html();
+            if (confirm("Deseja encerrar as análises da amostra " + amostra + "?")) {
+                $("#encerrarAnalise").val("1");
+                $("#submitbutton").trigger("click");
+            }
+
+        });
+
+        function validaRepeticao(valor)
+        {
+            var numeroRepeticoes = parseInt($("#numeroRepeticoes").val());
+            if (valor < 1)
+                valor = 1;
+            if (valor > numeroRepeticoes)
+                valor = numeroRepeticoes;
+            return valor;
+        }
+    });
+
+</script>

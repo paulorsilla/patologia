@@ -1,0 +1,19 @@
+<?php
+$title = 'Excluir um registro';
+$url   = $this->url('patologia/determinacao', ['action' => 'delete', 'id' => $determinacao->getId()]);
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+<p>
+    Deseja realmente excluir 
+    "<?= $this->escapeHtml($determinacao->getDescricao()); ?>"
+</p>
+
+<form action="<?php echo $url ?>" method="post">
+    <div class="form-group">
+        <input type="hidden" name="id" value="<?php echo (int) $determinacao->getId() ?>" />
+        <input type="submit" class="btn btn-danger" name="del" value="Sim" />
+        <input type="submit" class="btn btn-success" name="del" value="Não" />
+    </div>
+</form>

@@ -1,0 +1,65 @@
+<h1>Amostras cadastradas</h1>
+<hr>
+<form action="/patologia/amostra/index" method="get">
+    <div class="row">
+        <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Número do laboratório" name="numeroLaboratorio" id="numeroLaboratorio"  
+                   value="<?php echo (!empty($this->search['numeroLaboratorio'])) ? $this->search['numeroLaboratorio'] : "";?>">            
+        </div>
+        <div class="col-md-1 text-right">
+            <button class="btn-primary btn-sm" type="submit"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+        </div>
+    </div>
+</form>
+<hr>
+<div class="row">
+
+	<table class="table table-striped table-hover">
+		<thead>
+			<tr>
+				<th>Número do Laboratório</th>
+				<th>Espécie</th>
+				<th>Local da colheita</th>
+				<th>Data da colheita</th>
+				<th>Data do recebimento</th>
+				<th>Remetente</th>
+				<th>Status</th>
+				<th>Opções</th>
+			</tr>
+		</thead>
+		<tbody>
+                        <?php $url = ['1' => 'patologia/analise',
+                                        '2' => 'patologia/analise',
+                                        '3' => 'patologia/resultado'];
+                        $action = ['1' => 'start', '2' => 'save', '3' => 'view' ];
+			foreach ($this->amostras as $amostra): ?>
+			<tr>
+                            <td><a class="btn btn-primary" href="<?php echo $this->url($url[$amostra->getStatus()], 
+                                               ['action' => $action[$amostra->getStatus()],
+                                                   'id' => $amostra->getId()]); ?>">
+                                    <?php echo $amostra->getNumeroLaboratorio()?></a></td>
+				<td><?php echo $this->escapeHtml($amostra->getEspecie()->getDescricao());?></td>
+				<td><?php echo $this->escapeHtml($amostra->getLocalColheita());?></td>
+				<td><?php echo $this->escapeHtml(null != $amostra->getDataColheita() ? $amostra->getDataColheita()->format('d/m/Y') : "-");?></td>
+				<td><?php echo $this->escapeHtml(null != $amostra->getDataRecebimento() ? $amostra->getDataRecebimento()->format('d/m/Y') : "-");?></td>
+				<td><?php echo $this->escapeHtml($amostra->getRemetente());?></td>
+				<td><?php echo $this->escapeHtml($this->status[$amostra->getStatus()]);?>
+				<td><?php if($amostra->getStatus() == 1): ?>
+                                    <a class="btn btn-primary btn-sm pull-center"
+					href="<?php echo $this->url('patologia/amostra', ['action' => 'delete', 'id' => $amostra->getId()]) ?>"
+					title="Excluir registro."><span class="glyphicon glyphicon-trash"></span></a>
+                                        <?php endif;?>
+				</td>
+			</tr>
+			<?php endforeach;?>
+		</tbody>
+	</table>
+	<span class="pull-right">
+		<?php echo$this->paginationControl ( $this->amostras, 'Elastic', 'patologia/partial/paginator', [ 'route' => 'patologia/amostra' ] );?>
+           </span>
+</div>
+
+<div class="row">
+	<a class="btn btn-primary pull-left"
+		href="/patologia/amostra/save">Novo registro</a>
+</div>
